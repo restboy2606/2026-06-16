@@ -3,6 +3,7 @@ import { renderTemplate } from './dcRuntime'
 import { TEMPLATE } from './template'
 import { signIn, signOut, getSession, onAuthChange, summarizeUser, ensureProfile } from './lib/auth'
 import { requestPayment, enrollFree } from './lib/payment'
+import { fetchDashboard, touchStreak } from './lib/dashboard'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 디자인 아티팩트의 로그인/결제 버튼에 실제 핸들러를 연결하기 위한 최소 패치.
@@ -27,6 +28,13 @@ function patchTemplate(tpl) {
   // 4) 신청자 정보 → 로그인 사용자 정보
   sub('>홍길동</div>', '>{{ buyerName }}</div>')
   sub('>student@dreamitbiz.co.kr</div>', '>{{ buyerEmail }}</div>')
+  // 5) 마이페이지 → 실데이터 바인딩
+  sub('>안녕하세요, 홍길동님 👋</div>', '>안녕하세요, {{ dashName }}님 👋</div>')
+  sub('font-size:26px; color:#0a0b10;">홍</div>', 'font-size:26px; color:#0a0b10;">{{ dashInitial }}</div>')
+  sub('font-size:28px; color:var(--a1);">3</div>', 'font-size:28px; color:var(--a1);">{{ dashActive }}</div>')
+  sub('font-size:28px; color:var(--a2);">47</div>', 'font-size:28px; color:var(--a2);">{{ dashLessons }}</div>')
+  sub('font-size:28px; color:var(--text);">12<span style="font-size:16px;">일</span>', 'font-size:28px; color:var(--text);">{{ dashStreak }}<span style="font-size:16px;">일</span>')
+  sub('font-size:28px; color:var(--text);">2</div>', 'font-size:28px; color:var(--text);">{{ dashCerts }}</div>')
   return t
 }
 
@@ -38,6 +46,16 @@ export default class App extends React.Component {
     payMethod: 'card', paletteOpen: false, theme: 'lime', mode: 'dark', openMenu: null, certTab: 'aws',
     // 인증/결제
     user: null, authReady: false, accountOpen: false, payBusy: false,
+    // 마이페이지 실데이터 (null = 데모 폴백)
+    dash: null,
+  }
+
+  // 마이페이지 데이터 로드 (로그인 + Supabase 연결 시)
+  loadDashboard = async () => {
+    const { user } = this.state
+    if (!user) { this.setState({ dash: null }); return }
+    const dash = await fetchDashboard(user, this._courses())
+    this.setState({ dash })
   }
 
   // ── 테마 ───────────────────────────────────────────────────────────────────
@@ -107,12 +125,16 @@ export default class App extends React.Component {
     // 인증 초기화
     const session = await getSession()
     const u = summarizeUser(session)
-    this.setState({ user: u, authReady: true })
-    if (u) ensureProfile(u)
-    this._unsub = onAuthChange((s) => {
+    this.setState({ user: u, authReady: true }, () => {
+      if (this.state.screen === 'dashboard') this.loadDashboard()
+    })
+    if (u) { await ensureProfile(u); touchStreak(u.id) }
+    this._unsub = onAuthChange(async (s) => {
       const nu = summarizeUser(s)
-      this.setState({ user: nu })
-      if (nu) ensureProfile(nu)
+      this.setState({ user: nu, dash: null }, () => {
+        if (this.state.screen === 'dashboard') this.loadDashboard()
+      })
+      if (nu) { await ensureProfile(nu); touchStreak(nu.id) }
     })
   }
   componentDidUpdate() {
@@ -203,7 +225,11 @@ export default class App extends React.Component {
     ]
   }
 
-  go = (screen, id) => this.setState((s) => ({ screen, selectedId: id || s.selectedId, enrollStep: 1, enrollFree: false, openMenu: null, accountOpen: false }))
+  go = (screen, id) =>
+    this.setState(
+      (s) => ({ screen, selectedId: id || s.selectedId, enrollStep: 1, enrollFree: false, openMenu: null, accountOpen: false }),
+      () => { if (screen === 'dashboard') this.loadDashboard() },
+    )
 
   _instructors() {
     return [
@@ -285,6 +311,16 @@ export default class App extends React.Component {
     const certData = this._certData()
     const certActive = certData[this.state.certTab] || certData.aws
     const user = this.state.user
+
+    // ── 마이페이지: 실데이터(dash) 있으면 사용, 없으면 데모 폴백 ──
+    const dash = this.state.dash
+    const demoCourses = all.slice(0, 3).map((c, i) => ({ ...c, progress: [68, 32, 91][i], progressW: [68, 32, 91][i] + '%' }))
+    const myCourses = dash
+      ? dash.list.map((c) => ({ ...c, onClick: () => this.go('detail', c.course_id) }))
+      : demoCourses
+    const dashName = user ? user.name : '홍길동'
+    const dashInitial = (dashName || '회').trim().charAt(0) || '회'
+    const dashStats = dash ? dash.stats : { active: 3, completedLessons: 47, streak: 12, certificates: 2 }
 
     return {
       screen: S,
@@ -388,7 +424,12 @@ export default class App extends React.Component {
         { d: '03.27', t: '해커톤: 48시간 챌린지', tag: '오프라인' },
         { d: '04.03', t: 'AI 활용 실습 워크숍', tag: '온라인' },
       ],
-      myCourses: all.slice(0, 3).map((c, i) => ({ ...c, progress: [68, 32, 91][i], progressW: [68, 32, 91][i] + '%' })),
+      myCourses,
+      dashName, dashInitial,
+      dashActive: dashStats.active,
+      dashLessons: dashStats.completedLessons,
+      dashStreak: dashStats.streak,
+      dashCerts: dashStats.certificates,
       enrollStep: this.state.enrollStep,
       payMethod: this.state.payMethod,
       setStep: (n) => this.setState({ enrollStep: n }),

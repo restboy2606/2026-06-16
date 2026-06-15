@@ -5,14 +5,19 @@
 
 -- 회원 프로필 (OAuth 최초 로그인 시 upsert)
 create table if not exists rest06_profiles (
-  id          uuid primary key references auth.users(id) on delete cascade,
-  email       text,
-  name        text,
-  avatar      text,
-  provider    text,
-  created_at  timestamptz not null default now(),
-  updated_at  timestamptz not null default now()
+  id           uuid primary key references auth.users(id) on delete cascade,
+  email        text,
+  name         text,
+  avatar       text,
+  provider     text,
+  streak_days  integer not null default 1,   -- 연속 학습일 (로그인 시 갱신)
+  last_active  date,                          -- 마지막 접속일 (스트릭 계산용)
+  created_at   timestamptz not null default now(),
+  updated_at   timestamptz not null default now()
 );
+-- 기존 테이블이 있으면 컬럼만 추가
+alter table rest06_profiles add column if not exists streak_days integer not null default 1;
+alter table rest06_profiles add column if not exists last_active date;
 
 -- 결제 내역 (아임포트/PortOne)
 create table if not exists rest06_payments (
@@ -36,9 +41,11 @@ create table if not exists rest06_enrollments (
   course_id   text not null,
   payment_id  text,
   status      text not null default 'pending',    -- pending | active | trial | cancelled
+  progress    integer not null default 0,         -- 진도율 0~100
   created_at  timestamptz not null default now(),
   unique (user_id, course_id)
 );
+alter table rest06_enrollments add column if not exists progress integer not null default 0;
 
 -- ── RLS ──────────────────────────────────────────────────────────────────────
 alter table rest06_profiles    enable row level security;
