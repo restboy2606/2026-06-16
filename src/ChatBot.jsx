@@ -7,7 +7,7 @@ const PROVIDERS = {
     label: 'Solar',
     badge: '☀',
     url: 'https://api.upstage.ai/v1/chat/completions',
-    model: 'solar-pro',
+    model: 'solar-mini',
     keyField: 'solar_api_key',
   },
   openai: {

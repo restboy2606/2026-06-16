@@ -69,3 +69,15 @@ create policy "rest06_enrollments_upsert" on rest06_enrollments
   for insert with check (auth.uid() = user_id or user_id is null);
 create policy "rest06_enrollments_update" on rest06_enrollments
   for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- ── 챗봇 API 키 설정 (rest06_settings) ───────────────────────────────────────
+create table if not exists rest06_settings (
+  key        text primary key,
+  value      text not null,
+  updated_at timestamptz not null default now()
+);
+alter table rest06_settings enable row level security;
+
+-- anon도 읽기 허용 (프론트에서 AI API 키 조회용 — 클래스 데모 환경)
+create policy "rest06_settings_read" on rest06_settings
+  for select using (true);
