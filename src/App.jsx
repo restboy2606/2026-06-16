@@ -1,6 +1,7 @@
 import React from 'react'
 import { renderTemplate } from './dcRuntime'
 import { TEMPLATE } from './template'
+import ChatBot from './ChatBot'
 import { signIn, signOut, getSession, onAuthChange, summarizeUser, ensureProfile } from './lib/auth'
 import { requestPayment, enrollFree } from './lib/payment'
 import { fetchDashboard, touchStreak } from './lib/dashboard'
@@ -43,7 +44,7 @@ const PATCHED_TEMPLATE = patchTemplate(TEMPLATE)
 export default class App extends React.Component {
   state = {
     screen: 'home', selectedId: 'fullstack', catFilter: 'all', enrollStep: 1, enrollFree: false,
-    payMethod: 'card', paletteOpen: false, theme: 'lime', mode: 'dark', openMenu: null, certTab: 'aws',
+    payMethod: 'card', paletteOpen: false, theme: 'pixel', mode: 'dark', openMenu: null, certTab: 'aws',
     // 인증/결제
     user: null, authReady: false, accountOpen: false, payBusy: false,
     // 마이페이지 실데이터 (null = 데모 폴백)
@@ -61,7 +62,7 @@ export default class App extends React.Component {
   // ── 테마 ───────────────────────────────────────────────────────────────────
   _themes() {
     return [
-      { key: 'lime', name: '사이버 라임', a1: '#22d3ee', a1rgb: '34,211,238', a2: '#a3e635', a2rgb: '163,230,53' },
+      { key: 'pixel', name: '픽셀포지', a1: '#a78bfa', a1rgb: '167,139,250', a2: '#fb923c', a2rgb: '251,146,60' },
       { key: 'sunset', name: '노랑 · 빨강', a1: '#f5c518', a1rgb: '245,197,24', a2: '#fb5a47', a2rgb: '251,90,71' },
       { key: 'bubble', name: '파랑 · 핑크', a1: '#38bdf8', a1rgb: '56,189,248', a2: '#f472b6', a2rgb: '244,114,182' },
       { key: 'grape', name: '보라 · 민트', a1: '#a78bfa', a1rgb: '167,139,250', a2: '#34d399', a2rgb: '52,211,153' },
@@ -75,7 +76,7 @@ export default class App extends React.Component {
       root.style.setProperty('--a1', t.a1); root.style.setProperty('--a1-rgb', t.a1rgb)
       root.style.setProperty('--a2', t.a2); root.style.setProperty('--a2-rgb', t.a2rgb)
     }
-    try { localStorage.setItem('dib-theme', t.key) } catch (e) {}
+    try { localStorage.setItem('pf-theme', t.key) } catch (e) {}
   }
   pickTheme = (key) => {
     const t = this._themes().find((x) => x.key === key) || this._themes()[0]
@@ -98,7 +99,7 @@ export default class App extends React.Component {
       set('--faint', m.faint); set('--line', m.line)
     }
     try { document.body.style.background = m.bg; document.body.style.color = m.text } catch (e) {}
-    try { localStorage.setItem('dib-mode', mode) } catch (e) {}
+    try { localStorage.setItem('pf-mode', mode) } catch (e) {}
   }
   toggleMode = () => {
     const next = this.state.mode === 'dark' ? 'light' : 'dark'
@@ -108,12 +109,12 @@ export default class App extends React.Component {
 
   // ── 라이프사이클 ─────────────────────────────────────────────────────────────
   async componentDidMount() {
-    let saved = 'lime'
-    try { saved = localStorage.getItem('dib-theme') || 'lime' } catch (e) {}
+    let saved = 'pixel'
+    try { saved = localStorage.getItem('pf-theme') || 'pixel' } catch (e) {}
     const t = this._themes().find((x) => x.key === saved) || this._themes()[0]
     this.applyTheme(t)
     let savedMode = 'dark'
-    try { savedMode = localStorage.getItem('dib-mode') || 'dark' } catch (e) {}
+    try { savedMode = localStorage.getItem('pf-mode') || 'dark' } catch (e) {}
     this.applyMode(savedMode)
     const patch = {}
     if (t.key !== this.state.theme) patch.theme = t.key
@@ -339,7 +340,7 @@ export default class App extends React.Component {
       navAuthLabel: user ? `${user.name} ▾` : '로그인',
       isLoggedIn: Boolean(user),
       buyerName: user ? user.name : '게스트 (로그인 권장)',
-      buyerEmail: user ? user.email : 'student@dreamitbiz.co.kr',
+      buyerEmail: user ? user.email : 'student@pixelforge.ac',
       navMenu: [
         { key: 'about', label: 'About', items: [{ label: '회사소개', sub: '미션과 스토리', onClick: () => this.go('aboutCompany') }, { label: '강사소개', sub: '현직자 멘토진', onClick: () => this.go('aboutInstructors') }] },
         { key: 'courses', label: '강의', items: [{ label: '온라인 강의', sub: '평생 무제한 수강', onClick: () => this.go('online') }, { label: '오프라인 강의', sub: '강남·판교 부트캠프', onClick: () => this.go('offline') }] },
@@ -352,15 +353,15 @@ export default class App extends React.Component {
       closeMenu: () => this.setState({ openMenu: null }),
       instructors: this._instructors(),
       aboutTimeline: [
-        { year: '2018', title: '드림아이티비즈 설립', desc: '현직 개발자 3인이 모여 실무형 코딩 교육을 시작했습니다.' },
-        { year: '2021', title: '온라인 플랫폼 런칭', desc: '평생 수강 모델과 1:1 코드 리뷰를 도입해 수강생 3만 명을 돌파했습니다.' },
-        { year: '2023', title: '기업교육 사업 확장', desc: '삼성·LG 등 480개 기업에 맞춤형 사내 교육을 제공하기 시작했습니다.' },
-        { year: '2026', title: '12만 수강생 · AI 교육', desc: 'AI 활용 커리큘럼을 전면 도입하며 누적 수강생 12만 명을 넘었습니다.' },
+        { year: '2020', title: '픽셀포지 아카데미 설립', desc: '게임처럼 배우는 IT 교육을 꿈꾼 개발자 2인이 픽셀포지를 만들었습니다.' },
+        { year: '2022', title: '픽셀 커리큘럼 오픈', desc: '레벨·퀘스트 기반 학습 구조를 도입해 수강생 1만 명을 달성했습니다.' },
+        { year: '2024', title: 'AI 챗봇 튜터 도입', desc: 'AI 챗봇 튜터를 탑재해 24시간 실시간 질의응답 환경을 구축했습니다.' },
+        { year: '2026', title: '3만 수강생 · 기업교육 확장', desc: '누적 수강생 3만 명을 돌파하고 200개 기업 파트너십을 체결했습니다.' },
       ],
       aboutValues: [
-        { icon: '▶', title: '실무가 먼저', desc: '이론을 위한 이론이 아니라, 현업에서 바로 쓰는 것을 가르칩니다.', bg: 'rgba(var(--a1-rgb),.12)' },
-        { icon: '∞', title: '끝까지 함께', desc: '수강은 평생, 질문은 무제한. 수료가 아니라 취업까지 책임집니다.', bg: 'rgba(var(--a2-rgb),.12)' },
-        { icon: '◆', title: '정직한 교육', desc: '과장 없는 커리큘럼과 투명한 후기. 결과로 증명합니다.', bg: 'rgba(139,92,246,.12)' },
+        { icon: '▓', title: '게임처럼 배운다', desc: '레벨업·퀘스트·뱃지로 학습 동기를 유지하며 끝까지 완주합니다.', bg: 'rgba(var(--a1-rgb),.12)' },
+        { icon: '◈', title: '현업 스킬 퍼스트', desc: '현직 개발자가 설계한 커리큘럼으로 실무에서 바로 쓰는 기술을 가르칩니다.', bg: 'rgba(var(--a2-rgb),.12)' },
+        { icon: '⬡', title: 'AI와 함께 성장', desc: 'AI 튜터와 코드 리뷰로 혼자서도 막히지 않게 24시간 지원합니다.', bg: 'rgba(139,92,246,.12)' },
       ],
       onlineBenefits: [{ icon: '∞', text: '평생 무제한 수강' }, { icon: '▷', text: '모바일·PC 학습' }, { icon: '◷', text: '1:1 코드 리뷰' }],
       offlineHighlights: ['실습 80% 몰입형', '동료 네트워킹', '취업 연계', '국비지원·고용보험 환급'],
@@ -528,6 +529,7 @@ export default class App extends React.Component {
       <>
         {renderTemplate(PATCHED_TEMPLATE, this.renderVals())}
         {this._renderAccountOverlay()}
+        <ChatBot />
       </>
     )
   }

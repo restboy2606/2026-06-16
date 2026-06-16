@@ -1,14 +1,14 @@
-// DreamIT Biz 랜딩 뷰 템플릿 (디자인 아티팩트에서 추출).
+// PixelForge Academy 랜딩 뷰 템플릿 (디자인 아티팩트에서 추출).
 // DC 템플릿 문법: <sc-for list as>, <sc-if value>, {{ expr }}, onclick="{{ }}", style-hover.
-export const TEMPLATE = `<div data-root="" style="--a1:#22d3ee; --a1-rgb:34,211,238; --a2:#a3e635; --a2-rgb:163,230,53; --bg:#0a0b10; --bg-rgb:10,11,16; --surface:#0c0e15; --panel:#12141c; --text:#e8eaf0; --text2:#c4c9d8; --muted:#9aa0b4; --muted2:#7c8298; --faint:#5d6478; --line:255,255,255; color:var(--text); position:relative; min-height:100vh; background:var(--bg); isolation:isolate;">
+export const TEMPLATE = `<div data-root="" style="--a1:#a78bfa; --a1-rgb:167,139,250; --a2:#fb923c; --a2-rgb:251,146,60; --bg:#0a0b10; --bg-rgb:10,11,16; --surface:#0c0e15; --panel:#12141c; --text:#e8eaf0; --text2:#c4c9d8; --muted:#9aa0b4; --muted2:#7c8298; --faint:#5d6478; --line:255,255,255; color:var(--text); position:relative; min-height:100vh; background:var(--bg); isolation:isolate;">
 
   
 
   <!-- ============ NAV ============ -->
   <nav style="position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 clamp(12px,2.4vw,40px); height:72px; background:rgba(var(--bg-rgb),.82); backdrop-filter:blur(18px); border-bottom:1px solid rgba(var(--line),.07);">
     <div onclick="{{ goHome }}" style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; flex-shrink:0;">
-      <div style="width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--a1),var(--a2)); display:grid; place-items:center; font-family:'JetBrains Mono',monospace; font-weight:700; color:#0a0b10; font-size:17px; box-shadow:0 6px 22px rgba(var(--a1-rgb),.35); flex-shrink:0;">&lt;/&gt;</div>
-      <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:19px; letter-spacing:-.02em; white-space:nowrap;">DREAM<span style="color:var(--a2);">IT</span> <span style="color:var(--faint); font-weight:500;">BIZ</span></div>
+      <div style="width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--a1),var(--a2)); display:grid; place-items:center; font-family:'JetBrains Mono',monospace; font-weight:700; color:#0a0b10; font-size:17px; box-shadow:0 6px 22px rgba(var(--a1-rgb),.35); flex-shrink:0;">▓</div>
+      <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:19px; letter-spacing:-.02em; white-space:nowrap;">PIXEL<span style="color:var(--a2);">FORGE</span></div>
     </div>
     <div style="display:flex; align-items:center; gap:1px;" data-desktop-nav="">
       <sc-for list="{{ navMenu }}" as="m" hint-placeholder-count="6">
@@ -97,7 +97,7 @@ export const TEMPLATE = `<div data-root="" style="--a1:#22d3ee; --a1-rgb:34,211,
                 되는 가장 빠른 길.
               </h1>
               <p data-reveal="" style="font-size:clamp(15px,1.6vw,18px); line-height:1.7; color:var(--muted); max-width:480px; margin:0 0 32px;">
-                코딩·자격증·데이터 AI까지. <strong style="color:var(--text); font-weight:600;">드림아이티비즈</strong>의 실무형 커리큘럼으로 커리어를 업그레이드하세요. <span style="font-family:'JetBrains Mono',monospace; color:var(--a1); font-size:.92em;">// 3천 명 이상이 선택한 강의</span>
+                코딩·자격증·데이터 AI까지. <strong style="color:var(--text); font-weight:600;">픽셀포지 아카데미</strong>의 실무형 커리큘럼으로 커리어를 업그레이드하세요. <span style="font-family:'JetBrains Mono',monospace; color:var(--a1); font-size:.92em;">// 3만 명 이상이 선택한 강의</span>
               </p>
               <div data-reveal="" style="display:flex; flex-wrap:wrap; gap:13px; margin-bottom:40px;">
                 <button onclick="{{ goCatalog }}" style="font-family:'Pretendard',sans-serif; font-weight:700; font-size:16px; color:#0a0b10; background:linear-gradient(135deg,var(--a2),var(--a1)); border:none; padding:16px 28px; border-radius:13px; cursor:pointer; box-shadow:0 10px 30px rgba(var(--a2-rgb),.3); transition:transform .15s, box-shadow .15s;" style-hover="transform:translateY(-3px); box-shadow:0 16px 40px rgba(var(--a2-rgb),.45);">강의 둘러보기 →</button>
@@ -205,8 +205,8 @@ export const TEMPLATE = `<div data-root="" style="--a1:#22d3ee; --a1-rgb:34,211,
         <section style="position:relative; padding:clamp(60px,9vh,100px) clamp(16px,4vw,48px); background:var(--surface); border-top:1px solid rgba(var(--line),.06); border-bottom:1px solid rgba(var(--line),.06); overflow:hidden;">
           <div style="max-width:1180px; margin:0 auto;">
             <div data-reveal="" style="text-align:center; margin-bottom:54px;">
-              <div style="font-family:'JetBrains Mono',monospace; color:var(--a1); font-size:13px; margin-bottom:12px; letter-spacing:.06em;">// WHY DREAMIT</div>
-              <h2 style="font-family:'Space Grotesk','Pretendard',sans-serif; font-weight:700; font-size:clamp(28px,4vw,44px); letter-spacing:-.02em; margin:0;">왜 드림아이티비즈일까요?</h2>
+              <div style="font-family:'JetBrains Mono',monospace; color:var(--a1); font-size:13px; margin-bottom:12px; letter-spacing:.06em;">// WHY PIXELFORGE</div>
+              <h2 style="font-family:'Space Grotesk','Pretendard',sans-serif; font-weight:700; font-size:clamp(28px,4vw,44px); letter-spacing:-.02em; margin:0;">왜 픽셀포지 아카데미일까요?</h2>
             </div>
             <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;">
               <sc-for list="{{ features }}" as="f" hint-placeholder-count="4">
@@ -265,7 +265,7 @@ export const TEMPLATE = `<div data-root="" style="--a1:#22d3ee; --a1-rgb:34,211,
               <div>
                 <div style="font-family:'JetBrains Mono',monospace; color:var(--a2); font-size:13px; margin-bottom:14px; letter-spacing:.06em;">// FOR BUSINESS</div>
                 <h2 style="font-family:'Space Grotesk','Pretendard',sans-serif; font-weight:700; font-size:clamp(26px,3.6vw,40px); letter-spacing:-.02em; margin:0 0 16px; line-height:1.15;">팀 전체의 IT 역량,<br>한 번에 끌어올리세요</h2>
-                <p style="font-size:15.5px; color:var(--muted); line-height:1.7; margin:0 0 26px; max-width:520px;">임직원 맞춤 커리큘럼 설계부터 학습 관리, 수료 리포트까지. 삼성·LG·네이버 등 480개 기업이 드림아이티비즈와 함께합니다.</p>
+                <p style="font-size:15.5px; color:var(--muted); line-height:1.7; margin:0 0 26px; max-width:520px;">임직원 맞춤 커리큘럼 설계부터 학습 관리, 수료 리포트까지. 스타트업·중견기업 200곳 이상이 픽셀포지 아카데미와 함께합니다.</p>
                 <div style="display:flex; gap:13px; flex-wrap:wrap;">
                   <button onclick="{{ goAbout }}" style="font-family:'Pretendard',sans-serif; font-weight:700; font-size:15px; color:#0a0b10; background:var(--a2); border:none; padding:14px 24px; border-radius:12px; cursor:pointer;" style-hover="background:var(--a2);">기업교육 문의 →</button>
                   <button onclick="{{ goAbout }}" style="font-family:'Pretendard',sans-serif; font-weight:600; font-size:15px; color:var(--text); background:rgba(var(--line),.06); border:1px solid rgba(var(--line),.16); padding:14px 24px; border-radius:12px; cursor:pointer;" style-hover="background:rgba(var(--line),.12);">제안서 받기</button>
@@ -300,7 +300,7 @@ export const TEMPLATE = `<div data-root="" style="--a1:#22d3ee; --a1-rgb:34,211,
           <div style="max-width:1180px; margin:0 auto;">
             <div data-reveal="" style="font-family:'JetBrains Mono',monospace; color:var(--a1); font-size:13px; letter-spacing:.08em; margin-bottom:14px;">// ABOUT US</div>
             <h1 data-reveal="" style="font-family:'Space Grotesk','Pretendard',sans-serif; font-weight:700; font-size:clamp(34px,5vw,58px); line-height:1.08; letter-spacing:-.03em; margin:0 0 20px;">우리는 <span style="background:linear-gradient(100deg,var(--a1),var(--a2)); -webkit-background-clip:text; background-clip:text; color:transparent;">IT 커리어</span>를<br>만드는 회사입니다.</h1>
-            <p data-reveal="" style="font-size:clamp(15px,1.7vw,18px); color:var(--muted); line-height:1.7; max-width:560px; margin:0;">드림아이티비즈는 2018년 설립 이후 12만 명의 수강생이 코딩·자격증·데이터 AI를 배우고 커리어를 바꾼 온라인 IT 교육 플랫폼입니다.</p>
+            <p data-reveal="" style="font-size:clamp(15px,1.7vw,18px); color:var(--muted); line-height:1.7; max-width:560px; margin:0;">픽셀포지 아카데미는 2020년 설립 이후 3만 명의 수강생이 코딩·자격증·AI를 게임처럼 재미있게 배우고 커리어를 업그레이드한 온라인 IT 교육 플랫폼입니다.</p>
           </div>
         </section>
 
@@ -803,7 +803,7 @@ export const TEMPLATE = `<div data-root="" style="--a1:#22d3ee; --a1-rgb:34,211,
                     <div><div style="font-size:12px; color:var(--muted2); font-family:'JetBrains Mono',monospace; margin-bottom:7px;">이름</div><div style="padding:13px 15px; border-radius:11px; background:rgba(var(--line),.05); border:1px solid rgba(var(--line),.1); font-size:14px; color:var(--muted);">홍길동</div></div>
                     <div><div style="font-size:12px; color:var(--muted2); font-family:'JetBrains Mono',monospace; margin-bottom:7px;">연락처</div><div style="padding:13px 15px; border-radius:11px; background:rgba(var(--line),.05); border:1px solid rgba(var(--line),.1); font-size:14px; color:var(--muted);">010-1234-5678</div></div>
                   </div>
-                  <div><div style="font-size:12px; color:var(--muted2); font-family:'JetBrains Mono',monospace; margin-bottom:7px;">이메일</div><div style="padding:13px 15px; border-radius:11px; background:rgba(var(--line),.05); border:1px solid rgba(var(--line),.1); font-size:14px; color:var(--muted);">student@dreamitbiz.co.kr</div></div>
+                  <div><div style="font-size:12px; color:var(--muted2); font-family:'JetBrains Mono',monospace; margin-bottom:7px;">이메일</div><div style="padding:13px 15px; border-radius:11px; background:rgba(var(--line),.05); border:1px solid rgba(var(--line),.1); font-size:14px; color:var(--muted);">student@pixelforge.ac</div></div>
                 </div>
               </div>
               <div style="background:var(--panel); border:1px solid rgba(var(--line),.08); border-radius:18px; padding:24px;">
@@ -872,9 +872,9 @@ export const TEMPLATE = `<div data-root="" style="--a1:#22d3ee; --a1-rgb:34,211,
         <div>
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
             <div style="width:32px; height:32px; border-radius:9px; background:linear-gradient(135deg,var(--a1),var(--a2)); display:grid; place-items:center; font-family:'JetBrains Mono',monospace; font-weight:700; color:#0a0b10; font-size:15px;">&lt;/&gt;</div>
-            <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:17px;">DREAM<span style="color:var(--a2);">IT</span> BIZ</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:17px;">PIXEL<span style="color:var(--a2);">FORGE</span></div>
           </div>
-          <p style="font-size:13.5px; color:var(--muted2); line-height:1.7; max-width:280px; margin:0;">코딩·자격증·데이터 AI 실무 교육 플랫폼. 12만 수강생과 함께 성장합니다.</p>
+          <p style="font-size:13.5px; color:var(--muted2); line-height:1.7; max-width:280px; margin:0;">코딩·자격증·AI를 게임처럼 배우는 플랫폼. 3만 수강생과 함께 레벨업합니다.</p>
         </div>
         <sc-for list="{{ footerCols }}" as="col" hint-placeholder-count="3">
           <div>
@@ -886,7 +886,7 @@ export const TEMPLATE = `<div data-root="" style="--a1:#22d3ee; --a1-rgb:34,211,
         </sc-for>
       </div>
       <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:28px; border-top:1px solid rgba(var(--line),.06); flex-wrap:wrap;">
-        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--faint);">© 2026 DreamIT Biz Co., Ltd. · 사업자등록번호 123-45-67890</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--faint);">© 2026 PixelForge Academy · 사업자등록번호 123-45-67890</div>
         <div style="display:flex; gap:14px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted2);">
           <span style="cursor:pointer;" style-hover="color:var(--text);">이용약관</span>
           <span style="cursor:pointer; color:var(--text2);" style-hover="color:#fff;">개인정보처리방침</span>
