@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { supabase } from './lib/supabase'
 
 // ── API 설정 ─────────────────────────────────────────────────────────────────
 const PROVIDERS = {
@@ -75,12 +74,15 @@ export default function ChatBot() {
   const fetchKeys = async () => {
     setKeyStatus('loading')
     try {
-      if (!supabase) throw new Error('Supabase 미연결')
-      const { data, error } = await supabase
-        .from(TABLE)
-        .select('key, value')
-        .in('key', ['solar_api_key', 'openai_api_key'])
-      if (error) throw error
+      const baseUrl = import.meta.env.VITE_SUPABASE_URL
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      if (!baseUrl || !anonKey) throw new Error('Supabase 환경변수 미설정')
+      const res = await fetch(
+        `${baseUrl}/rest/v1/${TABLE}?key=in.(solar_api_key,openai_api_key)&select=key,value`,
+        { headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` } },
+      )
+      if (!res.ok) throw new Error(`Supabase HTTP ${res.status}`)
+      const data = await res.json()
       const map = Object.fromEntries((data || []).map((r) => [r.key, r.value]))
       setKeys(map)
       setKeyStatus('ok')
