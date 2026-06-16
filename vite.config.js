@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// 커스텀 도메인(rest06.dreamitbiz.com)에 배포 → base 는 루트('/').
-// CNAME 은 public/ 에 두어 빌드 시 dist/ 로 복사한다.
+// GitHub Pages 서브경로 배포: restboy2606.github.io/2026-06-16
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: '/2026-06-16/',
 })
